@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DayView"></activity>
+        <activity android:name=".SettingsActivity"></activity>
+        <activity
+            android:name=".WeekTest"
+            android:label="@string/title_activity_week_test"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".DayView" />
         <activity android:name=".WeekView" />
         <activity android:name=".Scroll" />
         <activity android:name=".MainActivity">

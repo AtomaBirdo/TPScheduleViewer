@@ -5,42 +5,58 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class DayView extends AppCompatActivity {
 
-    public class MyView extends View {
+    public static class MyView extends Drawable {
 
-        String[] subjects = {"AP English Language", "AP American History", "Adv App Dev", "AP Calc BC", "AP Microeconomics", "French 3", "AP Physics"};
-
-        public MyView(Context context) {
-            super(context);
+        public MyView(){
+            super();
         }
 
         @Override
-        protected void onDraw(Canvas canvas) {
+        public void setAlpha(int alpha){
 
-            Period.loadAllPeriods();
+        }
 
-            for (int i = 0; i < Period.periods.size(); i++) {
+        @Override
+        public void setColorFilter(ColorFilter colorFilter){
+
+        }
+
+        @Override
+        public int getOpacity(){
+            return PixelFormat.OPAQUE;
+        }
+
+        @Override
+        public void draw(Canvas canvas){
+
+            for (int i = 0; i < Period.periods.size(); i++){
                 Period temp = Period.periods.get(i);
                 try {
-                    temp.setSubject(subjects[Integer.parseInt(temp.getPeriod()) - 1]);
-                } catch (Exception e) {
+                    temp.setSubject(Period.subjects.get(Integer.parseInt(temp.getPeriod()) - 1));
                 }
+                catch(Exception e){}
                 Period.periods.set(i, temp);
             }
 
-            super.onDraw(canvas);
+            //super.onDraw(canvas);
             //setBackgroundColor(Color.CYAN);
-            int x = getWidth();
-            int y = getHeight();
+            int x = getBounds().width();
+            int y = getBounds().height();
             int radius = 100;
             Paint paint = new Paint();
             paint.setStyle(Paint.Style.FILL);
@@ -49,6 +65,7 @@ public class DayView extends AppCompatActivity {
 
             paint.setColor(Color.BLUE);
             paint.setStyle(Paint.Style.STROKE);
+            //paint.setStrokeWidth(2);
             //canvas.drawCircle(x / 2, y / 2, radius, paint);
 
             drawAll(canvas, paint, Period.periods);
@@ -77,6 +94,10 @@ public class DayView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new MyView(this));
+        setContentView(R.layout.activity_day_view);
+        //setContentView(new ScrollView(this));
+        MyView wv = new MyView();
+        ImageView image = findViewById(R.id.image);
+        image.setImageDrawable(wv);
     }
 }

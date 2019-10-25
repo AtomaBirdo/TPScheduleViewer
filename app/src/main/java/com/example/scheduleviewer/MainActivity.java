@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 
 import java.util.ArrayList;
@@ -21,6 +22,16 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.startActivity(myIntent);
     }
 
+    public void testPress(View view){
+        Intent myIntent = new Intent(MainActivity.this, WeekTest.class); //Create a new intent
+        MainActivity.this.startActivity(myIntent);
+    }
+
+    public void settingPress(View view){
+        Intent myIntent = new Intent(MainActivity.this, SettingsActivity.class); //Create a new intent
+        MainActivity.this.startActivity(myIntent);
+    }
+
     public void dayPress(View view){
         Intent myIntent = new Intent(MainActivity.this, DayView.class); //Create a new intent
         MainActivity.this.startActivity(myIntent);
@@ -29,7 +40,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Period.loadAllPeriods();
+        Period.loadAPeriods();
+        Period.loadSubjects();
         setContentView(R.layout.activity_main);
+
+        PeriodView.MyView wv = new PeriodView.MyView();
+        ImageView image = findViewById(R.id.image);
+        image.setImageDrawable(wv);
+
     }
 }

@@ -30,6 +30,8 @@ public class Period {
     WTime end;
     String period;
     String teacher, room, subject;
+    public static Boolean isBWeek = false;
+    public static ArrayList<String> subjects = new ArrayList<>();
 
     public static ArrayList<Period> periods = new ArrayList<Period>();
 
@@ -57,6 +59,21 @@ public class Period {
         room = "";
         teacher = "";
     }
+
+    public static void loadSubjects(){
+
+        subjects.add("AP English Language");
+        subjects.add("AP American History");
+        subjects.add("Adv App Dev");
+        subjects.add("AP Calc BC");
+        subjects.add("AP Microeconomics");
+        subjects.add("French 3");
+        subjects.add("AP Physics");
+
+//        for (int i = 0; i < 7; i++)
+//            subjects.add("");
+    }
+
     public void setSubject(String g){
         subject = g;
     }
@@ -199,6 +216,41 @@ public class Period {
 
     }*/
 
+    public static void drawCurrentPeriod(Canvas canvas, Paint paint, Period period, Period nextPeriod){
+        WTime eight = new WTime(period.start.getDay(),period.start.getHour(),period.start.getMinute());
+        for (int i = 0; i < 2; i++) {
+            int gs = (period.start.ticks - eight.ticks) / 175 + 20;
+            int ge = (period.end.ticks - eight.ticks) / 175 + 20;
+            int left = 100;
+            int right = 400;
+            int length;
+            canvas.drawRect(left, gs, right, ge, paint);
+            paint.setTextSize(36);
+
+            length = (period.end.getHourAMPM() + ":" + period.start.getMinuteS()).length();
+            if (length > 4) {
+                canvas.drawText(period.end.getHourAMPM() + ":" + period.end.getMinuteS(), right - 100, ge - 20, paint);
+            } else {
+                canvas.drawText(period.end.getHourAMPM() + ":" + period.end.getMinuteS(), right - 90, ge - 20, paint);
+            }
+            canvas.drawText(period.start.getHourAMPM() + ":" + period.start.getMinuteS(), left + 10, gs + 40, paint);
+
+            length = period.subject.length();
+            try {
+                canvas.drawText(Integer.parseInt(period.getPeriod()) + "", (left + right) / 2 - 20, (ge + gs) / 2 - 15, paint);
+            } catch (Exception e) {
+                canvas.drawText(period.getPeriod(), (left + right) / 2 - (period.period.length() * 10), (ge + gs) / 2, paint);
+            }
+            if (length > 15) {
+                paint.setTextSize(29);
+                canvas.drawText(period.subject, (left + right) / 2 - (length * 7), (ge + gs) / 2 + 15, paint);
+            } else {
+                canvas.drawText(period.subject, (left + right) / 2 - (length * 10), (ge + gs) / 2 + 15, paint);
+            }
+            period = nextPeriod;
+        }
+    }
+
     public static void drawDayPeriod(Canvas canvas, Paint paint, Period period){
         WTime eight = new WTime(period.start.getDay(),8,0);
         int gs = (period.start.ticks - eight.ticks) / 175 + 20;
@@ -229,6 +281,7 @@ public class Period {
             canvas.drawText(period.subject,(left+right)/2 - (length * 7),(ge+gs)/2 + 15,paint);
         }else{
             canvas.drawText(period.subject,(left+right)/2 - (length * 10),(ge+gs)/2 + 15,paint);
+
         }
     }
 
@@ -266,8 +319,58 @@ public class Period {
 
     }
 
-    public static void loadAllPeriods(){
+    public static void loadBPeriods(){
         periods.clear();
+        isBWeek = true;
+
+        periods.add(new Period(new WTime(1,8,20), 70, "1"));
+        periods.add(new Period(new WTime(1,9,35), 45, "2"));
+        periods.add(new Period(new WTime(1,10,25), 70, "3"));
+        periods.add(new Period(new WTime(1,11,45), 25, "Lunch"));
+        periods.add(new Period(new WTime(1,12,30), 45, "Extra Help"));
+        periods.add(new Period(new WTime(1,13,20), 45, "4"));
+        periods.add(new Period(new WTime(1,14,10), 45, "6"));
+
+        periods.add(new Period(new WTime(2,8,20), 70, "7"));
+        periods.add(new Period(new WTime(2,9,35), 45, "4"));
+        periods.add(new Period(new WTime(2,10,25), 70, "2"));
+        periods.add(new Period(new WTime(2,11,45), 25, "Lunch"));
+        periods.add(new Period(new WTime(2,12,30), 45, "Extra Help"));
+        periods.add(new Period(new WTime(2,13,20), 45, "5"));
+        periods.add(new Period(new WTime(2,14,10), 45, "3"));
+
+        periods.add(new Period(new WTime(3,8,00), 55, "Flex Block"));
+        periods.add(new Period(new WTime(3,9,00), 45, "5"));
+        periods.add(new Period(new WTime(3,9,50), 45, "6"));
+        periods.add(new Period(new WTime(3,10,40), 45, "1"));
+
+        periods.add(new Period(new WTime(4,8,20), 70, "4"));
+        periods.add(new Period(new WTime(4,9,35), 45, "7"));
+        periods.add(new Period(new WTime(4,10,25), 70, "6"));
+        periods.add(new Period(new WTime(4,11,45), 25, "Lunch"));
+        periods.add(new Period(new WTime(4,12,30), 45, "2"));
+        periods.add(new Period(new WTime(4,13,20), 45, "3"));
+        periods.add(new Period(new WTime(4,14,10), 45, "1"));
+
+        periods.add(new Period(new WTime(5,8,00), 45, "3"));
+        periods.add(new Period(new WTime(5,8,50), 45, "2"));
+        periods.add(new Period(new WTime(5,9,40), 70, "5"));
+        periods.add(new Period(new WTime(5,11,00), 40, "Chapel"));
+        periods.add(new Period(new WTime(5,11,45), 25, "Lunch"));
+        periods.add(new Period(new WTime(5,12,30), 45, "Extra Help"));
+        periods.add(new Period(new WTime(5,13,20), 45, "7"));
+        periods.add(new Period(new WTime(5,14,10), 45, "4"));
+
+        periods.add(new Period(new WTime(6,8,30), 45, "6"));
+        periods.add(new Period(new WTime(6,9,20), 45, "1"));
+        periods.add(new Period(new WTime(6,10,10), 45, "7"));
+        periods.add(new Period(new WTime(6,11,00), 45, "5"));
+
+    }
+
+    public static void loadAPeriods(){
+        periods.clear();
+        isBWeek = false;
 
         periods.add(new Period(new WTime(1,8,20), 70, "1"));
         periods.add(new Period(new WTime(1,9,35), 45, "2"));

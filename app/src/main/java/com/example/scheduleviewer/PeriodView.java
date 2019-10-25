@@ -10,14 +10,15 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
-public class WeekView extends AppCompatActivity {
+public class PeriodView extends AppCompatActivity {
 
     public static class MyView extends Drawable {
 
@@ -75,31 +76,29 @@ public class WeekView extends AppCompatActivity {
             canvas.drawText("(๑•̀ㅂ•́)و✧", x / 2 - 100, y / 2, paint);*/
         }
 
-        public void drawAll(Canvas canvas, Paint paint, ArrayList<Period> periods){
-            for (Period period: periods) {
-                Period.drawPeriod(canvas, paint, period);
+        public void drawAll(Canvas canvas, Paint paint, ArrayList<Period> periods) {
+            //Period previousPeriod = periods.get(0);
+            Calendar now = Calendar.getInstance();
+            int day = now.get(Calendar.DAY_OF_WEEK) - 1;
+            WTime time = new WTime();
+            Log.i("SHOWTIME", now.get(Calendar.HOUR_OF_DAY) + "");
+            for (Period period : periods) {
+                if (period.start.getDay() == day){
+                    if (period.start.isBefore(time) && period.end.isAfter(time))
+                    Period.drawCurrentPeriod(canvas, paint, period, Period.findNextPeriod(period.end));
+                    //else previousPeriod = period;
+                }
             }
         }
-
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_week_view);
+        setContentView(R.layout.activity_day_view);
         //setContentView(new ScrollView(this));
         MyView wv = new MyView();
         ImageView image = findViewById(R.id.image);
         image.setImageDrawable(wv);
-
-//        ScrollView sv = findViewById(R.id.Scroll);
-//
-//        RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams
-//                ((int) RelativeLayout.LayoutParams.WRAP_CONTENT,(int) RelativeLayout.LayoutParams.WRAP_CONTENT);
-//        params.leftMargin = 0;
-//        image.setLayoutParams(params);
-//
-//        sv.addView(image);
     }
 }
