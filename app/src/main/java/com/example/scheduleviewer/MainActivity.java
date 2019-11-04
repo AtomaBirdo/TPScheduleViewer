@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        for (Course a : Course.courseList) Log.i("COURSE", a.toString());
+        //for (Course a : Course.courseList) Log.i("COURSE", a.toString());
         super.onCreate(savedInstanceState);
         Period.loadAPeriods();
         Period.loadSubjects();
@@ -66,9 +66,10 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    String key = child.getKey();
-                    Log.i("KEY", key);
-                    courseRef = conditionRef.child(key);
+                    //String key = child.getKey();
+                    //Log.i("KEY", key);
+                    //courseRef = conditionRef.child(key);
+                    courseRef = child.getRef();
                     courseRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

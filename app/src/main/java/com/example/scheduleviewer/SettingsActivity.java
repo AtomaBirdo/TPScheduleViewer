@@ -1,8 +1,12 @@
 package com.example.scheduleviewer;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,10 +18,23 @@ import android.widget.ToggleButton;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class SettingsActivity extends AppCompatActivity {
 
     ArrayList<AutoCompleteTextView> subjects = new ArrayList<AutoCompleteTextView>();
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String COURSE1 = "COURSE1";
+    public static final String COURSE2 = "COURSE2";
+    public static final String COURSE3 = "COURSE3";
+    public static final String COURSE4 = "COURSE4";
+    public static final String COURSE5 = "COURSE5";
+    public static final String COURSE6 = "COURSE6";
+    public static final String COURSE7 = "COURSE7";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +51,16 @@ public class SettingsActivity extends AppCompatActivity {
         subjects.add((AutoCompleteTextView)findViewById(R.id.subject5));
         subjects.add((AutoCompleteTextView)findViewById(R.id.subject6));
         subjects.add((AutoCompleteTextView)findViewById(R.id.subject7));
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+
+        subjects.get(0).setText(sharedPreferences.getString(COURSE1, ""));
+        subjects.get(1).setText(sharedPreferences.getString(COURSE2, ""));
+        subjects.get(2).setText(sharedPreferences.getString(COURSE3, ""));
+        subjects.get(3).setText(sharedPreferences.getString(COURSE4, ""));
+        subjects.get(4).setText(sharedPreferences.getString(COURSE5, ""));
+        subjects.get(5).setText(sharedPreferences.getString(COURSE6, ""));
+        subjects.get(6).setText(sharedPreferences.getString(COURSE7, ""));
 
         /*String[] subjectList = {"AP Biology","AP Calculus AB","AP Calculus BC",
                 "AP English Literature & Composition",
@@ -64,14 +91,14 @@ public class SettingsActivity extends AppCompatActivity {
         ArrayList<String> subjectList = new ArrayList<>();
 
         for (Course temp : Course.courseList){
-            subjectList.add(temp.combine());
-            Log.i("Course", temp.toString());
+            if (!subjectList.contains((temp.combine()))) subjectList.add(temp.combine());
+            //Log.i("Course", temp.toString());
         }
 
         ArrayAdapter subjectAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, subjectList.toArray());
 
         for (int i = 0; i < subjects.size(); i++){
-            subjects.get(i).setText(Period.subjects.get(i));
+            //subjects.get(i).setText(Period.subjects.get(i));
             subjects.get(i).setAdapter(subjectAdapter);
         }
     }
@@ -83,12 +110,29 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void changeSubject(View view){
-        String sub = "";
+        ArrayList<String> courses = new ArrayList<>();
+
         for (int i = 0; i < subjects.size(); i++){
-            sub = subjects.get(i).getText().toString();
+            String sub = subjects.get(i).getText().toString();
             if (!sub.equals("")){
-                Period.subjects.set(i, sub);
+                Course course = Course.findCourse(sub);
+                if (course.getName() == null) Period.subjects.set(i, sub);
+                else Period.subjects.set(i, course.getName() + " " + course.getSection());
             }
+            courses.add(sub);
         }
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(COURSE1, courses.get(0));
+        editor.putString(COURSE2, courses.get(1));
+        editor.putString(COURSE3, courses.get(2));
+        editor.putString(COURSE4, courses.get(3));
+        editor.putString(COURSE5, courses.get(4));
+        editor.putString(COURSE6, courses.get(5));
+        editor.putString(COURSE7, courses.get(6));
+
+        editor.commit();
     }
 }

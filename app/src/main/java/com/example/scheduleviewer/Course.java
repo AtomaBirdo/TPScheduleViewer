@@ -33,6 +33,32 @@ public class Course {
     public Course() {
     }
 
+    public static Course findCourse(String combined){
+        String[] splited = combined.split(" ");
+        String temp = "";
+        Course result = new Course();
+        for (int i = 0; i < splited.length; i++){
+            try{
+                int sec = Integer.parseInt(splited[i]);
+                try {
+                    Integer.parseInt(splited[i + 1]);
+                }
+                catch (Exception e){
+                    for (Course course : courseList){
+                        if (course.getName().equals(temp.substring(1)) && sec == course.getSection()){
+                            result = course;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            catch (Exception e){}
+            temp = temp + " " + splited[i];
+        }
+        return result;
+    }
+
     public String combine(){
         return section == 0 ? (name + " " + teacher) : (name + " " + section + " " + teacher);
     }
