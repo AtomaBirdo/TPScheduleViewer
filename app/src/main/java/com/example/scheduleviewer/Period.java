@@ -19,6 +19,8 @@ package com.example.scheduleviewer;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 import java.io.*;
 import java.nio.charset.Charset;
@@ -30,6 +32,7 @@ public class Period {
     WTime end;
     String period;
     String teacher, room, subject;
+    DatabaseReference dr;
     public static Boolean isBWeek = false;
     public static ArrayList<String> subjects = new ArrayList<>();
 

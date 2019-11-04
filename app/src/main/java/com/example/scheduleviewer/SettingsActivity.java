@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -34,7 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
         subjects.add((AutoCompleteTextView)findViewById(R.id.subject6));
         subjects.add((AutoCompleteTextView)findViewById(R.id.subject7));
 
-        String[] subjectList = {"AP Biology","AP Calculus AB","AP Calculus BC",
+        /*String[] subjectList = {"AP Biology","AP Calculus AB","AP Calculus BC",
                 "AP English Literature & Composition",
                 "AP English Language & Composition",
                 "AP Chemistry","AP Computer Science A",
@@ -58,9 +59,16 @@ public class SettingsActivity extends AppCompatActivity {
                 "Modern World H", "Multi-Variable Calculus H", "Physics First H",
                 "Spanish 2 H", "Spanish 3 H", "Spanish 4 H", "Spanish 5 H",
                 "Spanish Language & Culture H",
-                "Advanced APP Development"};
+                "Advanced APP Development"};*/
 
-        ArrayAdapter subjectAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, subjectList);
+        ArrayList<String> subjectList = new ArrayList<>();
+
+        for (Course temp : Course.courseList){
+            subjectList.add(temp.combine());
+            Log.i("Course", temp.toString());
+        }
+
+        ArrayAdapter subjectAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, subjectList.toArray());
 
         for (int i = 0; i < subjects.size(); i++){
             subjects.get(i).setText(Period.subjects.get(i));
