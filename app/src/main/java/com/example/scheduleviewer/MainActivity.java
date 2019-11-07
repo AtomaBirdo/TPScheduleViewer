@@ -9,8 +9,10 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -69,6 +71,14 @@ public class MainActivity extends AppCompatActivity {
         Period.loadAPeriods();
         Period.loadSubjects(sub); //Load week A period and subjects
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        Period.ratioX = (float)(width / 2560.0);
+        Period.ratioY = (float)(height / 1704.0);
+
         //SettingsActivity.changeSubject(findViewById(R.id.change));
         //SettingsActivity sa = new SettingsActivity();
 
@@ -77,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
         PeriodView.MyView wv = new PeriodView.MyView();
         ImageView image = findViewById(R.id.image);
         image.setImageDrawable(wv);
+
+        Log.i("Width", "" + width); //2560
+        Log.i("height", "" + height); //1704
     }
 
     protected void onStart() { //The whole method is used to get data from firebase

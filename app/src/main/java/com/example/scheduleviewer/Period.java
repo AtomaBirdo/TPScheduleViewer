@@ -36,6 +36,9 @@ public class Period {
     public static Boolean isBWeek = false;
     public static ArrayList<String> subjects = new ArrayList<>();
 
+    public static float ratioX;
+    public static float ratioY;
+
     public static ArrayList<Period> periods = new ArrayList<Period>();
 
     public Period(WTime start, int periodLength, String period){
@@ -228,104 +231,99 @@ public class Period {
     public static void drawCurrentPeriod(Canvas canvas, Paint paint, Period period, Period nextPeriod){
         WTime eight = new WTime(period.start.getDay(),period.start.getHour(),period.start.getMinute());
         for (int i = 0; i < 2; i++) {
-            int gs = (period.start.ticks - eight.ticks) / 175 + 20;
-            int ge = (period.end.ticks - eight.ticks) / 175 + 20;
-            int left = 100;
-            int right = 400;
+            float gs = ((period.start.ticks - eight.ticks) / 175 + 20) * ratioY;
+            float ge = ((period.end.ticks - eight.ticks) / 175 + 20) * ratioY;
+            float left = 100 * ratioX;
+            float right = 400 * ratioX;
             int length;
             canvas.drawRect(left, gs, right, ge, paint);
-            paint.setTextSize(36);
+            paint.setTextSize(36 * ratioX);
 
             length = (period.end.getHourAMPM() + ":" + period.start.getMinuteS()).length();
             if (length > 4) {
-                canvas.drawText(period.end.getHourAMPM() + ":" + period.end.getMinuteS(), right - 100, ge - 20, paint);
+                canvas.drawText(period.end.getHourAMPM() + ":" + period.end.getMinuteS(), right - (100 * ratioX), ge - (20 * ratioY), paint);
             } else {
-                canvas.drawText(period.end.getHourAMPM() + ":" + period.end.getMinuteS(), right - 90, ge - 20, paint);
+                canvas.drawText(period.end.getHourAMPM() + ":" + period.end.getMinuteS(), right - (90 * ratioX), ge - (20 * ratioY), paint);
             }
-            canvas.drawText(period.start.getHourAMPM() + ":" + period.start.getMinuteS(), left + 10, gs + 40, paint);
+            canvas.drawText(period.start.getHourAMPM() + ":" + period.start.getMinuteS(), left + (10 * ratioX), gs + (40 * ratioY), paint);
 
             length = period.subject.length();
             try {
-                canvas.drawText(Integer.parseInt(period.getPeriod()) + "", (left + right) / 2 - 20, (ge + gs) / 2 - 15, paint);
+                canvas.drawText(Integer.parseInt(period.getPeriod()) + "", (left + right) / 2 - (20 * ratioX), (ge + gs) / 2 - (15 * ratioY), paint);
             } catch (Exception e) {
-                canvas.drawText(period.getPeriod(), (left + right) / 2 - (period.period.length() * 10), (ge + gs) / 2, paint);
+                canvas.drawText(period.getPeriod(), (left + right) / 2 - (period.period.length() * 10 * ratioX), (ge + gs) / 2, paint);
             }
             if (length > 15) {
-                paint.setTextSize(29);
-                canvas.drawText(period.subject, (left + right) / 2 - (length * 7), (ge + gs) / 2 + 15, paint);
+                paint.setTextSize(29 * ratioX);
+                canvas.drawText(period.subject, (left + right) / 2 - (length * 7 * ratioX), (ge + gs) / 2 + (15 * ratioY), paint);
             } else {
-                canvas.drawText(period.subject, (left + right) / 2 - (length * 10), (ge + gs) / 2 + 15, paint);
+                canvas.drawText(period.subject, (left + right) / 2 - (length * 10 * ratioX), (ge + gs) / 2 + (15 * ratioY), paint);
             }
-            period = nextPeriod;
         }
     }
 
     public static void drawDayPeriod(Canvas canvas, Paint paint, Period period){
         WTime eight = new WTime(period.start.getDay(),8,0);
-        int gs = (period.start.ticks - eight.ticks) / 175 + 20;
-        int ge = (period.end.ticks - eight.ticks) / 175 + 20;
-        int left = 100;
-        int right = 400;
+        float gs = ((period.start.ticks - eight.ticks) / 175 + 20) * ratioY;
+        float ge = ((period.end.ticks - eight.ticks) / 175 + 20) * ratioY;
+        float left = 100 * ratioX;
+        float right = 400 * ratioX;
         int length;
         canvas.drawRect(left, gs, right, ge, paint);
-        paint.setTextSize(36);
+        paint.setTextSize(36 * ratioX);
 
-        length = (period.end.getHourAMPM()+":"+period.start.getMinuteS()).length();
-        if (length > 4){
-            canvas.drawText(period.end.getHourAMPM()+":"+period.end.getMinuteS(),right - 100,ge-20,paint);
-        }else{
-            canvas.drawText(period.end.getHourAMPM()+":"+period.end.getMinuteS(),right - 90,ge-20,paint);
+        length = (period.end.getHourAMPM() + ":" + period.start.getMinuteS()).length();
+        if (length > 4) {
+            canvas.drawText(period.end.getHourAMPM() + ":" + period.end.getMinuteS(), right - (100 * ratioX), ge - (20 * ratioY), paint);
+        } else {
+            canvas.drawText(period.end.getHourAMPM() + ":" + period.end.getMinuteS(), right - (90* ratioX), ge - (20 * ratioY), paint);
         }
-        canvas.drawText(period.start.getHourAMPM()+":"+period.start.getMinuteS(),left + 10,gs+40,paint);
+        canvas.drawText(period.start.getHourAMPM() + ":" + period.start.getMinuteS(), left + (10* ratioX), gs + (40* ratioY), paint);
 
         length = period.subject.length();
         try {
-            canvas.drawText(Integer.parseInt(period.getPeriod()) + "", (left + right) / 2 - 20, (ge + gs) / 2 - 15, paint);
+            canvas.drawText(Integer.parseInt(period.getPeriod()) + "", (left + right) / 2 - (20 * ratioX), (ge + gs) / 2 - (15 * ratioY), paint);
+        } catch (Exception e) {
+            canvas.drawText(period.getPeriod(), (left + right) / 2 - (period.period.length() * 10 * ratioX), (ge + gs) / 2, paint);
         }
-        catch(Exception e){
-            canvas.drawText(period.getPeriod(), (left+right)/2 - (period.period.length() * 10), (ge + gs) / 2, paint);
-        }
-        if (length > 15){
-            paint.setTextSize(29);
-            canvas.drawText(period.subject,(left+right)/2 - (length * 7),(ge+gs)/2 + 15,paint);
-        }else{
-            canvas.drawText(period.subject,(left+right)/2 - (length * 10),(ge+gs)/2 + 15,paint);
-
+        if (length > 15) {
+            paint.setTextSize(29 * ratioX);
+            canvas.drawText(period.subject, (left + right) / 2 - (length * 7 * ratioX), (ge + gs) / 2 + (15 * ratioY), paint);
+        } else {
+            canvas.drawText(period.subject, (left + right) / 2 - (length * 10 * ratioX), (ge + gs) / 2 + (15 * ratioY), paint);
         }
     }
 
     public static void drawPeriod(Canvas canvas, Paint paint, Period period){
         WTime eight = new WTime(period.start.getDay(),8,0);
-        int gs = (period.start.ticks - eight.ticks) / 175 + 20;
-        int ge = (period.end.ticks - eight.ticks) / 175 + 20;
-        int left = 100 + 350 * (period.start.getDay() - 1);
-        int right = 400 + 350 * (period.start.getDay() - 1);
+        float gs = ((period.start.ticks - eight.ticks) / 175 + 20) * ratioY;
+        float ge = ((period.end.ticks - eight.ticks) / 175 + 20) * ratioY;
+        float left = (100 + 350 * (period.start.getDay() - 1)) * ratioX;
+        float right = (400 + 350 * (period.start.getDay() - 1)) * ratioX;
         int length;
         canvas.drawRect(left, gs, right, ge, paint);
-        paint.setTextSize(36);
+        paint.setTextSize(36 * ratioX);
 
-        length = (period.end.getHourAMPM()+":"+period.start.getMinuteS()).length();
-        if (length > 4){
-            canvas.drawText(period.end.getHourAMPM()+":"+period.end.getMinuteS(),right - 100,ge-20,paint);
-        }else{
-            canvas.drawText(period.end.getHourAMPM()+":"+period.end.getMinuteS(),right - 90,ge-20,paint);
+        length = (period.end.getHourAMPM() + ":" + period.start.getMinuteS()).length();
+        if (length > 4) {
+            canvas.drawText(period.end.getHourAMPM() + ":" + period.end.getMinuteS(), right - (100 * ratioX), ge - (20 * ratioY), paint);
+        } else {
+            canvas.drawText(period.end.getHourAMPM() + ":" + period.end.getMinuteS(), right - (90* ratioX), ge - (20 * ratioY), paint);
         }
-        canvas.drawText(period.start.getHourAMPM()+":"+period.start.getMinuteS(),left + 10,gs+40,paint);
+        canvas.drawText(period.start.getHourAMPM() + ":" + period.start.getMinuteS(), left + (10* ratioX), gs + (40* ratioY), paint);
 
         length = period.subject.length();
         try {
-            canvas.drawText(Integer.parseInt(period.getPeriod()) + "", (left + right) / 2 - 20, (ge + gs) / 2 - 15, paint);
+            canvas.drawText(Integer.parseInt(period.getPeriod()) + "", (left + right) / 2 - (20 * ratioX), (ge + gs) / 2 - (15 * ratioY), paint);
+        } catch (Exception e) {
+            canvas.drawText(period.getPeriod(), (left + right) / 2 - (period.period.length() * 10 * ratioX), (ge + gs) / 2, paint);
         }
-        catch(Exception e){
-            canvas.drawText(period.getPeriod(), (left+right)/2 - (period.period.length() * 10), (ge + gs) / 2, paint);
+        if (length > 15) {
+            paint.setTextSize(29 * ratioX);
+            canvas.drawText(period.subject, (left + right) / 2 - (length * 7 * ratioX), (ge + gs) / 2 + (15 * ratioY), paint);
+        } else {
+            canvas.drawText(period.subject, (left + right) / 2 - (length * 10 * ratioX), (ge + gs) / 2 + (15 * ratioY), paint);
         }
-        if (length > 15){
-            paint.setTextSize(29);
-            canvas.drawText(period.subject,(left+right)/2 - (length * 7),(ge+gs)/2 + 15,paint);
-        }else{
-            canvas.drawText(period.subject,(left+right)/2 - (length * 10),(ge+gs)/2 + 15,paint);
-        }
-
     }
 
     public static void loadBPeriods(){
