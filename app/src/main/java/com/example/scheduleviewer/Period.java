@@ -63,15 +63,21 @@ public class Period {
         teacher = "";
     }
 
-    public static void loadSubjects(){
+    public static void loadSubjects(ArrayList<String> sub){
 
-        subjects.add("AP English Language");
+        /*subjects.add("AP English Language");
         subjects.add("AP American History");
         subjects.add("Adv App Dev");
         subjects.add("AP Calc BC");
         subjects.add("AP Microeconomics");
         subjects.add("French 3");
-        subjects.add("AP Physics");
+        subjects.add("AP Physics");*/
+
+        for (String temp : sub) {
+            Course course = Course.findCourse(temp);
+            if (course.getName() == null) subjects.add(temp);
+            else subjects.add(course.getName() + " " + course.getSection());
+        }
 
 //        for (int i = 0; i < 7; i++)
 //            subjects.add("");

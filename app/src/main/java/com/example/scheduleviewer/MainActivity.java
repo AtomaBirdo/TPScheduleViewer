@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -42,23 +43,43 @@ public class MainActivity extends AppCompatActivity {
 
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference conditionRef = rootRef.child("Course");
-    DatabaseReference courseRef;
+    DatabaseReference courseRef; //Get the reference of the course
     static ArrayList<DatabaseReference> dr = new ArrayList<DatabaseReference>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //for (Course a : Course.courseList) Log.i("COURSE", a.toString());
+
         super.onCreate(savedInstanceState);
-        Period.loadAPeriods();
-        Period.loadSubjects();
         setContentView(R.layout.activity_main);
+
+        ArrayList<String> sub = new ArrayList<>();
+
+        //Get the Shared Preference from the app
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
+        //SettingsActivity.sharedPreferences = getSharedPreferences(SettingsActivity.SHARED_PREFS, MODE_PRIVATE);
+        sub.add(sharedPreferences.getString("COURSE1", ""));
+        sub.add(sharedPreferences.getString("COURSE2", ""));
+        sub.add(sharedPreferences.getString("COURSE3", ""));
+        sub.add(sharedPreferences.getString("COURSE4", ""));
+        sub.add(sharedPreferences.getString("COURSE5", ""));
+        sub.add(sharedPreferences.getString("COURSE6", ""));
+        sub.add(sharedPreferences.getString("COURSE7", ""));
+
+        Period.loadAPeriods();
+        Period.loadSubjects(sub); //Load week A period and subjects
+
+        //SettingsActivity.changeSubject(findViewById(R.id.change));
+        //SettingsActivity sa = new SettingsActivity();
+
+        //sa.changeSubject(findViewById(R.id.change));
 
         PeriodView.MyView wv = new PeriodView.MyView();
         ImageView image = findViewById(R.id.image);
         image.setImageDrawable(wv);
     }
 
-    protected void onStart() {
+    protected void onStart() { //The whole method is used to get data from firebase
         super.onStart();
 
         conditionRef.addValueEventListener(new ValueEventListener() {
@@ -102,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 k++;
                             }
-                            Course.courseList.add(temp);
+                            Course.courseList.add(temp); //Add loaded course to courseList
                         }
 
                         @Override
@@ -121,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
 
     }
 }

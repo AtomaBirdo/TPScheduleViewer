@@ -26,6 +26,7 @@ import java.util.Set;
 public class SettingsActivity extends AppCompatActivity {
 
     ArrayList<AutoCompleteTextView> subjects = new ArrayList<AutoCompleteTextView>();
+    static SharedPreferences sharedPreferences;
 
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String COURSE1 = "COURSE1";
@@ -44,6 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         tb.setChecked(Period.isBWeek);
 
+        //Add all AutoCompleteTextView into an ArrayList
         subjects.add((AutoCompleteTextView)findViewById(R.id.subject1));
         subjects.add((AutoCompleteTextView)findViewById(R.id.subject2));
         subjects.add((AutoCompleteTextView)findViewById(R.id.subject3));
@@ -52,15 +54,35 @@ public class SettingsActivity extends AppCompatActivity {
         subjects.add((AutoCompleteTextView)findViewById(R.id.subject6));
         subjects.add((AutoCompleteTextView)findViewById(R.id.subject7));
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        //Get courses from SharedPreferences
+        sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        ArrayList<String> rawSubject = new ArrayList<>();
+        rawSubject.add(sharedPreferences.getString(COURSE1, ""));
+        rawSubject.add(sharedPreferences.getString(COURSE2, ""));
+        rawSubject.add(sharedPreferences.getString(COURSE3, ""));
+        rawSubject.add(sharedPreferences.getString(COURSE4, ""));
+        rawSubject.add(sharedPreferences.getString(COURSE5, ""));
+        rawSubject.add(sharedPreferences.getString(COURSE6, ""));
+        rawSubject.add(sharedPreferences.getString(COURSE7, ""));
 
-        subjects.get(0).setText(sharedPreferences.getString(COURSE1, ""));
-        subjects.get(1).setText(sharedPreferences.getString(COURSE2, ""));
+        for (int i = 0; i < rawSubject.size(); i++){
+            String temp = rawSubject.get(i);
+            Course course = Course.findCourse(temp);
+            if (course.getName() == null) rawSubject.set(i, temp);
+            else rawSubject.set(i, course.combine());
+        }
+
+        for (int i = 0; i < subjects.size(); i++){
+            subjects.get(i).setText(rawSubject.get(i));
+        }
+
+        /*subjects.get(0).setText(Course.findCourse(sharedPreferences.getString(COURSE1, "")).combine());
+        subjects.get(1).setText();
         subjects.get(2).setText(sharedPreferences.getString(COURSE3, ""));
         subjects.get(3).setText(sharedPreferences.getString(COURSE4, ""));
         subjects.get(4).setText(sharedPreferences.getString(COURSE5, ""));
         subjects.get(5).setText(sharedPreferences.getString(COURSE6, ""));
-        subjects.get(6).setText(sharedPreferences.getString(COURSE7, ""));
+        subjects.get(6).setText(sharedPreferences.getString(COURSE7, ""));*/
 
         /*String[] subjectList = {"AP Biology","AP Calculus AB","AP Calculus BC",
                 "AP English Literature & Composition",
@@ -88,13 +110,14 @@ public class SettingsActivity extends AppCompatActivity {
                 "Spanish Language & Culture H",
                 "Advanced APP Development"};*/
 
+        //Generate a list of subjects
         ArrayList<String> subjectList = new ArrayList<>();
-
         for (Course temp : Course.courseList){
             if (!subjectList.contains((temp.combine()))) subjectList.add(temp.combine());
             //Log.i("Course", temp.toString());
         }
 
+        //Set the ArrayAdaptor for AutoCompleteTextView
         ArrayAdapter subjectAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, subjectList.toArray());
 
         for (int i = 0; i < subjects.size(); i++){
@@ -104,22 +127,23 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void weekType(View view){
+        //Load selected week type
         ToggleButton tb = (ToggleButton)view;
         if (tb.isChecked()) Period.loadBPeriods();
         else Period.loadAPeriods();
     }
 
-    public void changeSubject(View view){
+    public void changeSubject(View view){ //Run every time when commit edit
         ArrayList<String> courses = new ArrayList<>();
 
         for (int i = 0; i < subjects.size(); i++){
             String sub = subjects.get(i).getText().toString();
-            if (!sub.equals("")){
+            //if (!sub.equals("")){
                 Course course = Course.findCourse(sub);
                 if (course.getName() == null) Period.subjects.set(i, sub);
                 else Period.subjects.set(i, course.getName() + " " + course.getSection());
-            }
-            courses.add(sub);
+            //}
+            courses.add(Period.subjects.get(i));
         }
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
