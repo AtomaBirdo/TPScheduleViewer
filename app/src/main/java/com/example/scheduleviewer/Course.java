@@ -33,6 +33,7 @@ public class Course {
     public Course() {
     }
 
+    //The methods to find the course based on the combined string.
     public static Course findCourse(String combined){
         String[] splited = combined.split(" ");
         String temp = "";

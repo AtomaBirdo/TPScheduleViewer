@@ -228,6 +228,8 @@ public class Period {
 
     }*/
 
+    //All three drawing methods used the same code template with little difference
+    //Only draw the current period and the next period
     public static void drawCurrentPeriod(Canvas canvas, Paint paint, Period period, Period nextPeriod){
         WTime eight = new WTime(period.start.getDay(),period.start.getHour(),period.start.getMinute());
         for (int i = 0; i < 2; i++) {
@@ -262,6 +264,7 @@ public class Period {
         }
     }
 
+    //Draw the period for one day
     public static void drawDayPeriod(Canvas canvas, Paint paint, Period period){
         WTime eight = new WTime(period.start.getDay(),8,0);
         float gs = ((period.start.ticks - eight.ticks) / 175 + 20) * ratioY;
@@ -294,6 +297,7 @@ public class Period {
         }
     }
 
+    //Draw the entire week period
     public static void drawPeriod(Canvas canvas, Paint paint, Period period){
         WTime eight = new WTime(period.start.getDay(),8,0);
         float gs = ((period.start.ticks - eight.ticks) / 175 + 20) * ratioY;
@@ -326,6 +330,7 @@ public class Period {
         }
     }
 
+    //The hard code for Week B
     public static void loadBPeriods(){
         periods.clear();
         isBWeek = true;
@@ -375,6 +380,7 @@ public class Period {
 
     }
 
+    //The hard code for A Week
     public static void loadAPeriods(){
         periods.clear();
         isBWeek = false;

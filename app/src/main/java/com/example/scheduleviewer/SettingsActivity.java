@@ -28,6 +28,7 @@ public class SettingsActivity extends AppCompatActivity {
     ArrayList<AutoCompleteTextView> subjects = new ArrayList<AutoCompleteTextView>();
     static SharedPreferences sharedPreferences;
 
+    //Create the SharedPreference lib
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String COURSE1 = "COURSE1";
     public static final String COURSE2 = "COURSE2";
@@ -136,7 +137,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void changeSubject(View view){ //Run every time when commit edit
         ArrayList<String> courses = new ArrayList<>();
 
-        for (int i = 0; i < subjects.size(); i++){
+        for (int i = 0; i < subjects.size(); i++){ //Remove the teacher after the combined string
             String sub = subjects.get(i).getText().toString();
             //if (!sub.equals("")){
                 Course course = Course.findCourse(sub);
